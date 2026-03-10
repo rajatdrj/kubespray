@@ -1,0 +1,31 @@
+---
+- name: Install PostgreSQL client on Kubernetes worker nodes
+  hosts: kube_node
+  become: yes
+
+  tasks:
+
+    - name: Import PostgreSQL GPG key
+      rpm_key:
+        key: https://download.postgresql.org/pub/repos/yum/keys/PGDG-RPM-GPG-KEY-RHEL
+        state: present
+
+    - name: Install PostgreSQL repository
+      dnf:
+        name: https://download.postgresql.org/pub/repos/yum/reporpms/EL-9-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+        state: present
+        disable_gpg_check: yes
+
+    - name: Disable default PostgreSQL module
+      command: dnf -qy module disable postgresql
+
+    - name: Install PostgreSQL 17 client
+      dnf:
+        name: postgresql17
+        state: present
+
+    - name: Add PostgreSQL to PATH
+      lineinfile:
+        path: /etc/profile
+        line: 'export PATH=/usr/pgsql-17/bin:$PATH'
+        state: present
