@@ -29,7 +29,7 @@ inventory/*
 !inventory/local
 !inventory/sample
 inventory/*/artifacts/
-
+inventory/ci-cluster
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
